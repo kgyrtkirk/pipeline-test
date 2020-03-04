@@ -1,5 +1,5 @@
 
-def callc(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, run) {
+def testInParallel(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, run) {
   def splits
   node {
     prepare()
@@ -18,7 +18,7 @@ node {
             writeFile file: (split.includes ? inclusionsFile : exclusionsFile), text: split.list.join("\n")
             writeFile file: (split.includes ? exclusionsFile : inclusionsFile), text: ''
   //        }
-        //  stage('Main') 	{
+        //  stage('Main') {
             realtimeJUnit(results) {
               run()
             }
@@ -45,7 +45,7 @@ stage('Sources') {
 }
 
 stage('Testing') {
-  callc(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
+  testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
     unstash 'sources'
   }, {
 //    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
