@@ -18,11 +18,11 @@ stage('Testing') {
   testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
     unstash 'sources'
   }, {
-    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
+//    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
       withEnv(["MULTIPLIER=$params.MULTIPLIER"]) {
         sh 'mvn -s $SETTINGS -B clean test -Dmaven.test.failure.ignore'
       }
-    }
+//    }
   })
 }
 
