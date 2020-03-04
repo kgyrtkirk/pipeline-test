@@ -10,6 +10,7 @@ def call(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, r
     def split = splits[num]
     branches["split${num}"] = {
       stage("Test Section #${num + 1}") {
+node {
         //docker.image(image).inside {
           stage('Preparation') {
             prepare()
@@ -21,7 +22,7 @@ def call(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, r
               run()
             }
           }
-//        }
+        }
       }
     }
   }
