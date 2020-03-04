@@ -12,18 +12,16 @@ def call(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, r
       stage("Test Section #${num + 1}") {
 node {
         //docker.image(image).inside {
-//          stage('Preparation') 
-		{
+//          stage('Preparation') {
             prepare()
             writeFile file: (split.includes ? inclusionsFile : exclusionsFile), text: split.list.join("\n")
             writeFile file: (split.includes ? exclusionsFile : inclusionsFile), text: ''
-          }
-        //  stage('Main') 
-	{
+  //        }
+        //  stage('Main') 	{
             realtimeJUnit(results) {
               run()
             }
-          }
+//          }
         }
       }
     }
