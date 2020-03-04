@@ -20,9 +20,11 @@ stage('Testing') {
   }, {
 //    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
       withEnv(["MULTIPLIER=$params.MULTIPLIER"]) {
-        sh 'mvn -s $SETTINGS -B clean test -Dmaven.test.failure.ignore'
+        sh 'mvn -B clean test -Dmaven.test.failure.ignore'
       }
 //    }
   })
 }
 
+
+//jenkins/jnlp-slave:3.27-1
