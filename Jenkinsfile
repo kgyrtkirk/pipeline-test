@@ -10,7 +10,7 @@ def testInParallel(parallelism, inclusionsFile, exclusionsFile, results, image, 
     def num = i
     def split = splits[num]
     branches["split${num}"] = {
-      stage("Test Section #${num + 1}") {
+      stage("Test #${num + 1}") {
 node {
         //docker.image(image).inside {
 //          stage('Preparation') {
@@ -37,18 +37,13 @@ properties([
     ])
 ])
 
-stage('Sources') {
-  node {
-    checkout scm
-    stash name: 'sources', excludes: 'Jenkinsfile,target/'
-  }
-}
 
 stage('Testing') {
   testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
     unstash 'sources'
   }, {
-//    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
+    //configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
+      checkout scm
       withEnv(["MULTIPLIER=$params.MULTIPLIER"]) {
         sh 'mvn -B test -Dmaven.test.failure.ignore'
       }
