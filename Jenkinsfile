@@ -20,7 +20,7 @@ stage('Testing') {
   }, {
 //    configFileProvider([configFile(fileId: 'jenkins-mirror', variable: 'SETTINGS')]) {
       withEnv(["MULTIPLIER=$params.MULTIPLIER"]) {
-        sh 'mvn -B clean test -Dmaven.test.failure.ignore'
+        sh 'mvn -B test -Dmaven.test.failure.ignore'
       }
 //    }
   })
