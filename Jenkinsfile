@@ -69,7 +69,16 @@ node(POD_LABEL) {
     load '/home/jenkins/agent/load.props'
     sh 'df -h'
     sh '''echo S==$S'''
+    sh '''cat << EOF > rsyncd.conf
+    [ws]
+path = $PWD
+comment = RSYNC FILES
+read only = true
+timeout = 300
 
+EOF
+'''
+    sh '''nohup rsync --server --config=rsyncd.conf &'''
   //  sh 'ls -la /persistent'
 //    sh 'git clone https://github.com/apache/hive'
   //  sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
@@ -81,7 +90,8 @@ node(POD_LABEL) {
 stage('Testing') {
   testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
 //    checkout scm
-    sh 'tar xf /persistent/archive.tar'
+    sh  'rsync -rvv --stats rsync://$S/ws .'
+//    sh 'tar xf /persistent/archive.tar'
     sh 'du -h --max-depth=1'
 //    unstash 'sources'
   }, {
