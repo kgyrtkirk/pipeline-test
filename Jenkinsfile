@@ -48,13 +48,6 @@ podTemplate(workspaceVolume: dynamicPVC(requestsSize: "16Gi"), containers: [
 spec:
   securityContext:
     fsGroup: 1000
-initContainers:
-  - name: persistent-init
-    image: /something/bash-alpine:1.5
-    command: ['chown', '1000:1000','/persistent']
-    volumeMounts:
-      - name: volume-0
-        mountPath: /persistent
 ''',
   volumes:[persistentVolumeClaim(claimName: 'test-dynamic-volume-claim', mountPath: '/persistent')]
 ) {
@@ -71,9 +64,9 @@ node(POD_LABEL) {
     checkout scm
     sh 'df -h'
     sh 'ls -la /persistent'
-    sh 'sudo chown 1000 /persistent'
     sh 'git clone https://github.com/apache/hive'
     sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
+    sh 'tar cf /persistent/archive.tar .'
   	//stash 'sources'
   }
 }
@@ -82,7 +75,8 @@ node(POD_LABEL) {
 stage('Testing') {
   testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
 //    checkout scm
-    unstash 'sources'
+    sh 'tar xf /persistent/archive.tar'
+//    unstash 'sources'
   }, {
     configFileProvider([configFile(fileId: 'artifactory', variable: 'SETTINGS')]) {
       withEnv(["MULTIPLIER=$params.MULTIPLIER"]) {
