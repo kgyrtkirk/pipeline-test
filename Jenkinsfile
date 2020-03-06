@@ -60,6 +60,8 @@ properties([
 node(POD_LABEL) {
   container('maven') {
     checkout scm
+    sh 'git clone https://github.com/apache/hive'
+    sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
   	stash 'sources'
   }
 }
