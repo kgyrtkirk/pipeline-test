@@ -64,6 +64,7 @@ node(POD_LABEL) {
     checkout scm
     sh 'df -h'
     sh 'ls -la /persistent'
+    sh 'sudo chown 1000 /persistent'
     sh 'git clone https://github.com/apache/hive'
     sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
   	//stash 'sources'
