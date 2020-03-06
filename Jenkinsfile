@@ -49,7 +49,7 @@ spec:
   securityContext:
     fsGroup: 1000
 ''',
-  volumes:[persistentVolumeClaim(claimName: 'test-dynamic-volume-claim', mountPath: '/persistent')]
+//  volumes:[persistentVolumeClaim(claimName: 'test-dynamic-volume-claim', mountPath: '/persistent')]
 ) {
 
 properties([
@@ -63,10 +63,10 @@ node(POD_LABEL) {
   container('maven') {
     checkout scm
     sh 'df -h'
-    sh 'ls -la /persistent'
-    sh 'git clone https://github.com/apache/hive'
-    sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
-    sh 'tar cf /persistent/archive.tar .'
+  //  sh 'ls -la /persistent'
+//    sh 'git clone https://github.com/apache/hive'
+  //  sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
+//    sh 'tar cf /persistent/archive.tar .'
   	//stash 'sources'
   }
 
