@@ -48,6 +48,16 @@ podTemplate(workspaceVolume: dynamicPVC(requestsSize: "16Gi"), containers: [
 spec:
   securityContext:
     fsGroup: 1000
+initContainers:
+  - name: persistent-init
+    image: /something/bash-alpine:1.5
+      command:
+        - chown
+        - 1000:1000
+        - /persistent
+      volumeMounts:
+        - name: volume-0
+          mountPath: /persistent
 ''',
   volumes:[persistentVolumeClaim(claimName: 'test-dynamic-volume-claim', mountPath: '/persistent')]
 ) {
