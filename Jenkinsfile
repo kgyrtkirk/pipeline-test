@@ -35,12 +35,14 @@ node(POD_LABEL) {
 }
 
 
-podTemplate(workspaceVolume: dynamicPVC(requestsSize: "16Gi"), containers: [
+podTemplate(
+  //workspaceVolume: dynamicPVC(requestsSize: "16Gi"), 
+  containers: [
     containerTemplate(name: 'maven', image: 'cloudbees/jnlp-slave-with-java-build-tools', ttyEnabled: true, command: 'cat',
-        resourceRequestCpu: '1500m',
-        resourceLimitCpu: '4000m',
-        resourceRequestMemory: '3000Mi',
-        resourceLimitMemory: '8000Mi'
+        resourceRequestCpu: '500m',
+        resourceLimitCpu: '1000m',
+        resourceRequestMemory: '1000Mi',
+        resourceLimitMemory: '3000Mi'
     ),
 //    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
 //    containerTemplate(name: 'golang', image: 'golang:1.8.0', ttyEnabled: true, command: 'cat')
@@ -62,7 +64,11 @@ properties([
 node(POD_LABEL) {
   container('maven') {
     checkout scm
+    sh '''awk 'END{print "S="$1}' /etc/hosts >> /tmp/load.props'''
+    load '/tmp/load.props'
     sh 'df -h'
+    sh '''echo S==$S'''
+
   //  sh 'ls -la /persistent'
 //    sh 'git clone https://github.com/apache/hive'
   //  sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
