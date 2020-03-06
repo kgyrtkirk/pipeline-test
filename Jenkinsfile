@@ -64,8 +64,9 @@ properties([
 node(POD_LABEL) {
   container('maven') {
     checkout scm
-    sh '''awk 'END{print "S="$1}' /etc/hosts >> /tmp/load.props'''
-    load '/tmp/load.props'
+    sh '''awk 'END{print "S="$1}' /etc/hosts >> /home/jenkins/agent/load.props'''
+    sh '''cat /home/jenkins/agent/load.props'''
+    load '/home/jenkins/agent/load.props'
     sh 'df -h'
     sh '''echo S==$S'''
 
