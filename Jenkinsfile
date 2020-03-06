@@ -1,17 +1,20 @@
 
 def testInParallel(parallelism, inclusionsFile, exclusionsFile, results, image, prepare, run) {
   def splits
-  node {
+node(POD_LABEL) {
+  container('maven') {
     prepare()
     splits = splitTests parallelism: parallelism, generateInclusions: true, estimateTestsFromFiles: true
   }
+}
   def branches = [:]
   for (int i = 0; i < splits.size(); i++) {
     def num = i
     def split = splits[num]
     branches["split${num}"] = {
       stage("Test #${num + 1}") {
-node {
+node(POD_LABEL) {
+  container('maven') {
         //docker.image(image).inside {
 //          stage('Preparation') {
             prepare()
@@ -24,11 +27,28 @@ node {
             }
 //          }
         }
+}
       }
     }
   }
   parallel branches
 }
+
+
+podTemplate(workspaceVolume: dynamicPVC(requestsSize: "16Gi"), containers: [
+    containerTemplate(name: 'maven', image: 'cloudbees/jnlp-slave-with-java-build-tools', ttyEnabled: true, command: 'cat',
+        resourceRequestCpu: '1500m',
+        resourceLimitCpu: '4000m',
+        resourceRequestMemory: '3000Mi',
+        resourceLimitMemory: '8000Mi'
+    ),
+//    containerTemplate(name: 'maven', image: 'maven:3.3.9-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
+//    containerTemplate(name: 'golang', image: 'golang:1.8.0', ttyEnabled: true, command: 'cat')
+  ], yaml:'''
+spec:
+  securityContext:
+    fsGroup: 1000
+''') {
 
 properties([
     parameters([
@@ -51,5 +71,5 @@ stage('Testing') {
   })
 }
 
-
+}
 //jenkins/jnlp-slave:3.27-1
