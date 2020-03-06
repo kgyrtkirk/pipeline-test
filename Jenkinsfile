@@ -51,13 +51,10 @@ spec:
 initContainers:
   - name: persistent-init
     image: /something/bash-alpine:1.5
-      command:
-        - chown
-        - 1000:1000
-        - /persistent
-      volumeMounts:
-        - name: volume-0
-          mountPath: /persistent
+    command: ['chown', '1000:1000','/persistent']
+    volumeMounts:
+      - name: volume-0
+        mountPath: /persistent
 ''',
   volumes:[persistentVolumeClaim(claimName: 'test-dynamic-volume-claim', mountPath: '/persistent')]
 ) {
