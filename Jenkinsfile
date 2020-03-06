@@ -78,7 +78,7 @@ timeout = 300
 EOF
 cat rsyncd.conf
 '''
-    sh '''nohup rsync --server --config=rsyncd.conf &'''
+    sh '''rsync --daemon --config=rsyncd.conf --port 9873'''
   //  sh 'ls -la /persistent'
 //    sh 'git clone https://github.com/apache/hive'
   //  sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
@@ -90,7 +90,7 @@ cat rsyncd.conf
 stage('Testing') {
   testInParallel(count(Integer.parseInt(params.SPLIT)), 'inclusions.txt', 'exclusions.txt', 'target/surefire-reports/TEST-*.xml', 'maven:3.5.0-jdk-8', {
 //    checkout scm
-    sh  'rsync -rvv --stats rsync://$S/ws .'
+    sh  'rsync -rvv --stats rsync://$S:9873/ws .'
 //    sh 'tar xf /persistent/archive.tar'
     sh 'du -h --max-depth=1'
 //    unstash 'sources'
