@@ -64,8 +64,7 @@ properties([
 node(POD_LABEL) {
   container('maven') {
     checkout scm
-    sh '''hostname -i'''
-    sh '''(echo -n 'S="';awk 'END{print $1}'  /etc/hosts;echo '"') >> /home/jenkins/agent/load.props'''
+    sh '''printf 'S="%s"' "`hostname -i`" >> /home/jenkins/agent/load.props'''
     sh '''cat /home/jenkins/agent/load.props'''
     load '/home/jenkins/agent/load.props'
     sh 'df -h'
