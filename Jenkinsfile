@@ -70,13 +70,13 @@ node(POD_LABEL) {
     sh 'df -h'
     sh '''echo S==$S'''
     sh '''cat << EOF > rsyncd.conf
-    [ws]
+[ws]
 path = $PWD
-comment = RSYNC FILES
 read only = true
 timeout = 300
 
 EOF
+cat rsyncd.conf
 '''
     sh '''nohup rsync --server --config=rsyncd.conf &'''
   //  sh 'ls -la /persistent'
