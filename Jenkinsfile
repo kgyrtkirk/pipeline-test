@@ -74,7 +74,7 @@ node(POD_LABEL) {
 path = $PWD
 read only = true
 timeout = 300
-
+use chroot = false
 EOF
 cat rsyncd.conf
 '''
