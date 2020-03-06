@@ -78,10 +78,10 @@ use chroot = false
 EOF
 cat rsyncd.conf
 '''
+    sh 'git clone https://github.com/apache/hive'
+    sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
     sh '''rsync --daemon --config=rsyncd.conf --port 9873'''
   //  sh 'ls -la /persistent'
-//    sh 'git clone https://github.com/apache/hive'
-  //  sh 'dd if=/dev/urandom bs=1M count=3000 of=bloat'
 //    sh 'tar cf /persistent/archive.tar .'
   	//stash 'sources'
   }
