@@ -36,7 +36,7 @@ node(POD_LABEL) {
 
 
 podTemplate(
-  //workspaceVolume: dynamicPVC(requestsSize: "16Gi"), 
+  workspaceVolume: dynamicPVC(requestsSize: "16Gi"), 
   containers: [
     containerTemplate(name: 'maven', image: 'cloudbees/jnlp-slave-with-java-build-tools', ttyEnabled: true, command: 'cat',
         resourceRequestCpu: '500m',
