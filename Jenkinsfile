@@ -7,7 +7,7 @@ pipeline {
 sh '''#!/bin/bash -e
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
-git merge origin/master'
+git merge origin/master
 
 git branch -a
 cat Jenkinsfile
