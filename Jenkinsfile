@@ -6,6 +6,7 @@ pipeline {
         sh 'echo Building ${BRANCH_NAME}...xxx'
 println "branch::: ${env.BRANCH_NAME}"
 sh '''#!/bin/bash -e
+set
 cat .git/config
 git fetch origin master:refs/remotes/origin/master
 
