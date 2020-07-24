@@ -4,7 +4,7 @@ pipeline {
     stage('build') {
       steps {
         sh 'echo Building ${BRANCH_NAME}...xxx'
-println "branch::: ${env.BRANCH_NAME}"
+println "branch::: ${env.CHANGE_TARGET}"
 sh '''#!/bin/bash -e
 set
 cat .git/config
