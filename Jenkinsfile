@@ -4,6 +4,7 @@ pipeline {
     stage('build') {
       steps {
         sh 'echo Building ${BRANCH_NAME}...xxx'
+
 sh '''#!/bin/bash -e
 cat .git/config
 git fetch origin master
