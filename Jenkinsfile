@@ -7,7 +7,8 @@ pipeline {
 
 sh '''#!/bin/bash -e
 cat .git/config
-git fetch origin master
+git fetch origin master:refs/remotes/origin/master
+
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 git branch -a
